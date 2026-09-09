@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Warehouse Manager -->
+        <record id="warehouse_manager" model="res.users">
+            <field name="name">Warehouse Manager</field>
+            <field name="login">warehouse_manager</field>
+            <field name="email">warehouse@example.com</field>
+            <field name="password">warehouse123</field>
+            <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_manager')])]"/>
+        </record>
+
+        <!-- Purchase Officer -->
+        <record id="purchase_officer" model="res.users">
+            <field name="name">Purchase Officer</field>
+            <field name="login">purchase_officer</field>
+            <field name="email">purchase@example.com</field>
+            <field name="password">purchase123</field>
+            <field name="groups_id" eval="[(6, 0, [ref('purchase.group_purchase_manager')])]"/>
+        </record>
+
+        <!-- Sales Officer -->
+        <record id="sales_officer" model="res.users">
+            <field name="name">Sales Officer</field>
+            <field name="login">sales_officer</field>
+            <field name="email">sales@example.com</field>
+            <field name="password">sales123</field>
+            <field name="groups_id" eval="[(6, 0, [ref('sales_team.group_sale_manager')])]"/>
+        </record>
+
+        <!-- Accountant -->
+        <record id="accountant" model="res.users">
+            <field name="name">Accountant</field>
+            <field name="login">accountant</field>
+            <field name="email">account@example.com</field>
+            <field name="password">account123</field>
+            <field name="groups_id" eval="[(6, 0, [ref('account.group_account_manager')])]"/>
+        </record>
+
+        <!-- Field Representative -->
+        <record id="field_representative" model="res.users">
+            <field name="name">Field Representative</field>
+            <field name="login">field_rep</field>
+            <field name="email">field@example.com</field>
+            <field name="password">field123</field>
+            <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_user')])]"/>
+        </record>
+    </data>
+</odoo>
