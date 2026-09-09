@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Stock Summary Report -->
+        <record id="action_stock_summary_report" model="ir.actions.server">
+            <field name="name">Stock Summary Report</field>
+            <field name="model_id" ref="stock.model_stock_quant"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = {
+                    'type': 'ir.actions.act_window',
+                    'name': 'Stock Summary',
+                    'res_model': 'stock.quant',
+                    'view_mode': 'tree,form',
+                    'domain': [('quantity', '>', 0)],
+                    'context': {'search_default_internal_loc': 1},
+                }
+            </field>
+        </record>
+
+        <!-- Incoming Shipments Report -->
+        <record id="action_incoming_shipments_report" model="ir.actions.server">
+            <field name="name">Incoming Shipments Report</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = {
+                    'type': 'ir.actions.act_window',
+                    'name': 'Incoming Shipments',
+                    'res_model': 'stock.picking',
+                    'view_mode': 'tree,form',
+                    'domain': [('picking_type_code', '=', 'incoming')],
+                    'context': {'search_default_todo': 1},
+                }
+            </field>
+        </record>
+
+        <!-- Outgoing Shipments Report -->
+        <record id="action_outgoing_shipments_report" model="ir.actions.server">
+            <field name="name">Outgoing Shipments Report</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = {
+                    'type': 'ir.actions.act_window',
+                    'name': 'Outgoing Shipments',
+                    'res_model': 'stock.picking',
+                    'view_mode': 'tree,form',
+                    'domain': [('picking_type_code', '=', 'outgoing')],
+                    'context': {'search_default_todo': 1},
+                }
+            </field>
+        </record>
+
+        <!-- Inventory Valuation Report -->
+        <record id="action_inventory_valuation_report" model="ir.actions.server">
+            <field name="name">Inventory Valuation Report</field>
+            <field name="model_id" ref="stock.model_stock_quant"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = {
+                    'type': 'ir.actions.act_window',
+                    'name': 'Inventory Valuation',
+                    'res_model': 'stock.quant',
+                    'view_mode': 'tree,form',
+                    'domain': [('quantity', '>', 0)],
+                    'context': {'search_default_internal_loc': 1, 'search_default_group_by_product': 1},
+                }
+            </field>
+        </record>
+
+        <!-- Stock Movement History -->
+        <record id="action_stock_movement_history" model="ir.actions.server">
+            <field name="name">Stock Movement History</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = {
+                    'type': 'ir.actions.act_window',
+                    'name': 'Stock Movements',
+                    'res_model': 'stock.move',
+                    'view_mode': 'tree,form',
+                    'domain': [('state', '=', 'done')],
+                    'context': {'search_default_group_by_date': 1},
+                }
+            </field>
+        </record>
+
+        <!-- Low Stock Alert -->
+        <record id="action_low_stock_alert" model="ir.actions.server">
+            <field name="name">Low Stock Alert</field>
+            <field name="model_id" ref="stock.model_stock_quant"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = {
+                    'type': 'ir.actions.act_window',
+                    'name': 'Low Stock Alert',
+                    'res_model': 'stock.quant',
+                    'view_mode': 'tree,form',
+                    'domain': [('quantity', '&lt;', 10), ('quantity', '>', 0)],
+                    'context': {'search_default_internal_loc': 1},
+                }
+            </field>
+        </record>
+    </data>
+</odoo>
