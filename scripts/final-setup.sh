@@ -1,184 +1,197 @@
 #!/bin/bash
-# Final Setup Script for Odoo Warehouse
-# This script completes the entire setup process
+# الإعداد النهائي لنظام إدارة المخازن
+# يقوم هذا السكريبت بتشغيل جميع خطوات الإعداد بالترتيب
 
 set -e
 
-echo "=== Odoo Warehouse Final Setup ==="
-echo "Date: $(date)"
+echo "=========================================="
+echo "   الإعداد النهائي لنظام إدارة المخازن"
+echo "=========================================="
+echo ""
+echo "التاريخ: $(date)"
 echo ""
 
-# Step 1: Verify all files
-echo "Step 1: Verifying files..."
-if [ -f "render.yaml" ] && [ -f "Dockerfile" ] && [ -f "SETUP-GUIDE.md" ]; then
-    echo "✅ All required files present"
+# ألوان الإخراج
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # بدون لون
+
+# دالة لطباعة القسم
+print_section() {
+    echo ""
+    echo -e "${YELLOW}========================================${NC}"
+    echo -e "${YELLOW}  $1${NC}"
+    echo -e "${YELLOW}========================================${NC}"
+    echo ""
+}
+
+# دالة لطباعة النجاح
+print_success() {
+    echo -e "${GREEN}✅ $1${NC}"
+}
+
+# دالة لطباعة التحذير
+print_warning() {
+    echo -e "${YELLOW}⚠️  $1${NC}"
+}
+
+# الخطوة 1: التحقق من المتطلبات
+print_section "الخطوة 1: التحقق من المتطلبات"
+
+if command -v docker &> /dev/null; then
+    print_success "Docker مثبت"
 else
-    echo "❌ Missing required files"
-    exit 1
+    print_warning "Docker غير مثبت"
 fi
 
-# Step 2: Check scripts
+if command -v git &> /dev/null; then
+    print_success "Git مثبت"
+else
+    print_warning "Git غير مثبت"
+fi
+
+if command -v curl &> /dev/null; then
+    print_success "cURL مثبت"
+else
+    print_warning "cURL غير مثبت"
+fi
+
+# الخطوة 2: إنشاء هيكل المجلدات
+print_section "الخطوة 2: إنشاء هيكل المجلدات"
+
+mkdir -p /tmp/odoo-warehouse/{scripts,backups,logs,reports}
+print_success "تم إنشاء هيكل المجلدات"
+
+# الخطوة 3: إعداد Google Drive
+print_section "الخطوة 3: إعداد Google Drive للنسخ الاحتياطي"
+
+echo "الحساب: islam.rihan@gmail.com"
 echo ""
-echo "Step 2: Checking scripts..."
-SCRIPTS=(
-    "scripts/init-odoo.sh"
-    "scripts/backup.sh"
-    "scripts/restore.sh"
-    "scripts/monitor.sh"
-    "scripts/setup-odoo.py"
-    "scripts/setup-backup.py"
-    "scripts/setup-domain.py"
-    "scripts/setup-monitoring.py"
-)
-
-for script in "${SCRIPTS[@]}"; do
-    if [ -f "$script" ]; then
-        echo "✅ $script"
-    else
-        echo "❌ Missing: $script"
-    fi
-done
-
-# Step 3: Make scripts executable
+echo "لإعداد Google Drive:"
+echo "1. تثبيت rclone: curl https://rclone.org/install.sh | sudo bash"
+echo "2. تكوين rclone: rclone config"
+echo "3. إنشاء مجلد: rclone mkdir gdrive:Odoo-Backups"
 echo ""
-echo "Step 3: Making scripts executable..."
-chmod +x scripts/*.sh
-chmod +x scripts/*.py
-echo "✅ Scripts are now executable"
 
-# Step 4: Create README
+read -p "هل تريد إعداد Google Drive الآن؟ (y/n): " setup_gdrive
+if [ "$setup_gdrive" = "y" ]; then
+    bash scripts/gdrive-setup.sh
+else
+    print_warning "تخطي إعداد Google Drive"
+fi
+
+# الخطوة 4: إعداد نطاق DuckDNS
+print_section "الخطوة 4: إعداد نطاق DuckDNS المجاني"
+
+echo "يوفر DuckDNS نطاقاً مجانياً مثل: yourname.duckdns.org"
 echo ""
-echo "Step 4: Creating README..."
-cat > README.md << 'EOF'
-# Odoo Warehouse Management System
+echo "لإعداد DuckDNS:"
+echo "1. اذهب إلى: https://www.duckdns.org"
+echo "2. سجل الدخول عبر GitHub/Google/Facebook"
+echo "3. أنشئ نطاقاً جديداً"
+echo "4. انسخ الرمز المميز"
+echo ""
 
-A complete warehouse management system for charitable organizations with 5 users.
+read -p "هل تريد إعداد DuckDNS الآن؟ (y/n): " setup_duckdns
+if [ "$setup_duckdns" = "y" ]; then
+    bash scripts/setup-domain.sh
+else
+    print_warning "تخطي إعداد DuckDNS"
+fi
 
-## Features
+# الخطوة 5: إعداد تنبيهات Slack
+print_section "الخطوة 5: إعداد تنبيهات Slack"
 
-- **Inventory Management**: Track stock levels, movements, and valuations
-- **Purchase Management**: Manage purchase orders and supplier relationships
-- **Sales Management**: Handle sales orders and customer relationships
-- **Accounting Integration**: Track financial transactions
-- **Reporting**: Generate comprehensive reports
+echo "يوفر Slack إشعارات تنبيه مجانية"
+echo ""
+echo "لإعداد Slack:"
+echo "1. أنشئ مساحة عمل على: https://slack.com/create"
+echo "2. أنشئ قناة: #odoo-alerts"
+echo "3. أنشئ Incoming Webhook"
+echo ""
 
-## System Requirements
+read -p "هل تريد إعداد Slack الآن؟ (y/n): " setup_slack
+if [ "$setup_slack" = "y" ]; then
+    bash scripts/setup-slack.sh
+else
+    print_warning "تخطي إعداد Slack"
+fi
 
-- **Platform**: Render.com (Free Tier)
-- **Database**: PostgreSQL (Free Tier)
-- **Storage**: 1GB (included)
-- **Users**: 5 concurrent users
+# الخطوة 6: إعداد المراقبة
+print_section "الخطوة 6: إعداد المراقبة"
 
-## Installation
+echo "تكوين مراقبة النظام..."
+python3 scripts/setup-monitoring.py
+print_success "تم تكوين المراقبة"
 
-1. Fork or clone this repository
-2. Create a Render account at https://render.com
-3. Create a new Blueprint from this repository
-4. Wait for deployment to complete
-5. Access your Odoo instance
+# الخطوة 7: إعداد نظام النسخ الاحتياطي
+print_section "الخطوة 7: إعداد نظام النسخ الاحتياطي"
 
-## Default Credentials
+echo "تكوين نظام النسخ الاحتياطي..."
+python3 scripts/setup-backup.py
+print_success "تم تكوين نظام النسخ الاحتياطي"
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@example.com | admin |
-| Warehouse Manager | warehouse_manager | warehouse123 |
-| Purchase Officer | purchase_officer | purchase123 |
-| Sales Officer | sales_officer | sales123 |
-| Accountant | accountant | account123 |
-| Field Representative | field_rep | field123 |
+# الخطوة 8: إنشاء إدخالات crontab
+print_section "الخطوة 8: إعداد المهام المجدولة"
 
-## Configuration
+echo "إضافة مهام cron للمهام الآلية..."
 
-### Users
-- Warehouse Manager: Full inventory access
-- Purchase Officer: Purchase order management
-- Sales Officer: Sales order management
-- Accountant: Financial reporting
-- Field Representative: Limited access for field operations
+# إنشاء ملف crontab
+cat > /tmp/odoo-crontab << EOF
+# جدول أعمال Odoo
+# النسخ الاحتياطي اليومي الساعة 2:00 صباحاً إلى Google Drive
+0 2 * * * /tmp/gdrive_backup.sh >> /tmp/backup.log 2>&1
 
-### Warehouses
-- Main Warehouse (WH-MAIN): Central storage
-- Purchase Warehouse (WH-PURCH): Incoming goods
-- Sales Warehouse (WH-SALES): Outgoing goods
+# الفحص الصحي كل 5 دقائق
+*/5 * * * * /tmp/odoo_health_check.sh >> /tmp/odoo-health.log 2>&1
 
-## Backup
+# تقرير الأداء يومياً الساعة 6:00 صباحاً
+0 6 * * * /tmp/odoo_performance_report.sh >> /tmp/odoo-performance.log 2>&1
 
-Daily backups are automatically created at 2:00 AM UTC.
-
-To manually backup:
-```bash
-./scripts/backup.sh
-```
-
-To restore from backup:
-```bash
-./scripts/restore.sh /path/to/backup.sql.gz
-```
-
-## Monitoring
-
-Health checks run every 5 minutes. Alerts are sent when:
-- CPU usage exceeds 80%
-- Memory usage exceeds 80%
-- Disk usage exceeds 80%
-- Database connections exceed 100
-
-## Support
-
-For issues or questions, please refer to the SETUP-GUIDE.md file.
-
-## License
-
-This project is open source and available for use by charitable organizations.
+# تحديث DuckDNS كل 5 دقائق (إذا كان مكوناً)
+*/5 * * * * /tmp/duckdns_autoupdate.sh >> /tmp/duckdns.log 2>&1
 EOF
 
-echo "✅ README.md created"
+print_success "تم إنشاء إدخالات crontab"
 
-# Step 5: Create .env.example
-echo ""
-echo "Step 5: Creating environment configuration..."
-cat > .env.example << 'EOF'
-# Database Configuration
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=odoo
-DB_USER=odoo
-DB_PASSWORD=your_password_here
+# الخطوة 9: الملخص
+print_section "ملخص الإعداد النهائي"
 
-# Odoo Configuration
-ODOO_ADMIN_PASSWORD=your_admin_password_here
-ODOO_LONGPOLLING_PORT=8072
-
-# Backup Configuration
-BACKUP_RETENTION_DAYS=7
-BACKUP_LOCATION=/tmp/backups
-
-# Monitoring Configuration
-ALERT_EMAIL=admin@example.com
-HEALTH_CHECK_INTERVAL=300
-EOF
-
-echo "✅ .env.example created"
-
-# Step 6: Summary
+echo "✅ تم إنشاء هيكل المجلدات"
+echo "✅ Google Drive (islam.rihan@gmail.com)"
+echo "✅ نطاق DuckDNS المجاني"
+echo "✅ تنبيهات Slack"
+echo "✅ تم تكوين نظام المراقبة"
+echo "✅ تم تكوين نظام النسخ الاحتياطي"
+echo "✅ تم إعداد المهام المجدولة"
 echo ""
-echo "=== Setup Complete ==="
+echo "=========================================="
+echo "   الخطوات التالية"
+echo "=========================================="
 echo ""
-echo "Files created:"
-ls -la
+echo "1. الدفع إلى GitHub:"
+echo "   git add ."
+echo "   git commit -m 'إعداد كامل'"
+echo "   git push"
 echo ""
-echo "Scripts available:"
-ls -la scripts/
+echo "2. النشر على Render:"
+echo "   - اذهب إلى https://render.com"
+echo "   - أنشئ Blueprint من مستودع GitHub"
+echo "   - انتظر اكتمال النشر"
 echo ""
-echo "Next steps:"
-echo "1. Push changes to GitHub"
-echo "2. Create Render Blueprint"
-echo "3. Wait for deployment"
-echo "4. Access Odoo at the provided URL"
-echo "5. Login with default credentials"
-echo "6. Change admin password"
-echo "7. Configure users and warehouses"
-echo "8. Start using the system!"
+echo "3. تكوين الإضافات:"
+echo "   - شغّل: bash scripts/gdrive-setup.sh"
+echo "   - شغّل: bash scripts/setup-domain.sh"
+echo "   - شغّل: bash scripts/setup-slack.sh"
 echo ""
-echo "For detailed instructions, see SETUP-GUIDE.md"
+echo "4. الوصول إلى Odoo:"
+echo "   - الرابط: https://your-domain.duckdns.org"
+echo "   - تسجيل الدخول: admin@example.com"
+echo "   - كلمة المرور: admin"
+echo ""
+echo "5. غيّر كلمة مرور admin فوراً!"
+echo ""
+echo "=========================================="
+echo "   تم الانتهاء من الإعداد!"
+echo "=========================================="

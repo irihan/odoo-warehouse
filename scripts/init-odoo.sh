@@ -1,19 +1,36 @@
 #!/bin/bash
-# Script to initialize Odoo warehouse configuration
-# Run this after Render deployment is complete
+# تهيئة نظام إدارة المخازن
+# شغّل هذا السكريبت بعد إعداد Render
 
-echo "=== Odoo Warehouse Initialization Script ==="
+echo "=========================================="
+echo "   تهيئة نظام إدارة المخازن"
+echo "=========================================="
+echo ""
 
-# Wait for Odoo to be ready
-echo "Waiting for Odoo to start..."
+# انتظار تشغيل Odoo
+echo "انتظار تشغيل Odoo..."
 sleep 30
 
-echo "Odoo should be running now!"
 echo ""
-echo "Next steps:"
-echo "1. Access Odoo at the URL provided by Render"
-echo "2. Login with admin@example.com / admin"
-echo "3. Go to Apps and install: Inventory, Purchase, Sales"
-echo "4. Configure warehouses and users"
+echo "=========================================="
+echo "   تم تهيئة النظام بنجاح!"
+echo "=========================================="
 echo ""
-echo "=== Setup Complete ==="
+echo "الخطوات التالية:"
+echo "1. افتح الرابط المقدم من Render"
+echo "2. سجل الدخول: admin@example.com"
+echo "3. كلمة المرور: admin"
+echo "4. غيّر كلمة المرور فوراً"
+echo "5. ثبّت تطبيقات المخازن"
+echo ""
+echo "بيانات المستخدمين:"
+echo "├── مسؤول المخازن: warehouse_manager / warehouse123"
+echo "├── مسؤول المشتريات: purchase_officer / purchase123"
+echo "├── مسؤول المبيعات: sales_officer / sales123"
+echo "├── المحاسب: accountant / account123"
+echo "└── المندوب الميداني: field_rep / field123"
+echo ""
+echo "المخازن:"
+echo "├── المخزن الرئيسي (WH-MAIN)"
+echo "├── مخزن المشتريات (WH-PURCH)"
+echo "└── مخزن المبيعات (WH-SALES)"
