@@ -1,223 +1,223 @@
-# Odoo Warehouse Management System
+# نظام إدارة المخازن - جمعية خيرية
 
-A complete warehouse management system for charitable organizations with 5 users.
+نظام متكامل لإدارة المخازن مصمم خصيصاً للجمعيات الخيرية مع 5 مستخدمين.
 
-## Features
+## المميزات
 
-- **Inventory Management**: Track stock levels, movements, and valuations
-- **Purchase Management**: Manage purchase orders and supplier relationships
-- **Sales Management**: Handle sales orders and customer relationships
-- **Accounting Integration**: Track financial transactions
-- **Reporting**: Generate comprehensive reports
-- **Backup**: Automatic daily backups to Google Drive
-- **Monitoring**: Real-time system health monitoring
-- **Alerts**: Slack notifications for important events
-- **Free Domain**: DuckDNS integration for custom domain
+- **إدارة المخازن**: تتبع مستويات المخزون والحركة والتقديرات
+- **إدارة المشتريات**: إدارة أوامر الشراء وعلاقات الموردين
+- **إدارة المبيعات**: معالجة أوامر البيع وعلاقات العملاء
+- **التكامل المحاسبي**: تتبع المعاملات المالية
+- **التقارير**: إنشاء تقارير شاملة
+- **النسخ الاحتياطي**: نسخ احتياطي تلقائي يومي إلى Google Drive
+- **المراقبة**: مراقبة حالة النظام في الوقت الفعلي
+- **التنبيهات**: إشعارات Slack للأحداث المهمة
+- **نطاق مجاني**: DuckDNS للنطاق المخصص
 
-## System Requirements
+## متطلبات النظام
 
-- **Platform**: Render.com (Free Tier)
-- **Database**: PostgreSQL (Free Tier)
-- **Storage**: 1GB (included)
-- **Users**: 5 concurrent users
+- **المنصة**: Render.com (مجاني)
+- **قاعدة البيانات**: PostgreSQL (مجاني)
+- **التخزين**: 1GB (مشمول)
+- **المستخدمون**: 5 مستخدمين متزامنين
 
-## Installation
+## التثبيت
 
-### Quick Start
+### البدء السريع
 
-1. Fork or clone this repository
-2. Create a Render account at https://render.com
-3. Create a new Blueprint from this repository
-4. Wait for deployment to complete
-5. Access your Odoo instance
+1. استنسخ هذا المستودع
+2. أنشئ حساب Render على https://render.com
+3. أنشئ Blueprint جديد من هذا المستودع
+4. انتظر اكتمال النشر
+5. احصل على رابط Odoo
 
-### Complete Setup
+### الإعداد الكامل
 
 ```bash
-# Run the complete setup script
+# تشغيل سكريبت الإعداد الكامل
 bash scripts/complete-setup.sh
 ```
 
-This will guide you through:
-- Setting up DuckDNS domain
-- Configuring Slack alerts
-- Setting up Google Drive backup
-- Configuring monitoring
-- Setting up scheduled tasks
+سيقوم هذا بـ:
+- إعداد نطاق DuckDNS
+- تكوين تنبيهات Slack
+- إعداد النسخ الاحتياطي إلى Google Drive
+- تكوين المراقبة
+- إعداد المهام المجدولة
 
-## Default Credentials
+## بيانات الدخول الافتراضية
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@example.com | admin |
-| Warehouse Manager | warehouse_manager | warehouse123 |
-| Purchase Officer | purchase_officer | purchase123 |
-| Sales Officer | sales_officer | sales123 |
-| Accountant | accountant | account123 |
-| Field Representative | field_rep | field123 |
+| الدور | البريد الإلكتروني | كلمة المرور |
+|-------|------------------|-------------|
+| المسؤول | admin@example.com | admin |
+| مسؤول المخازن | warehouse_manager | warehouse123 |
+| مسؤول المشتريات | purchase_officer | purchase123 |
+| مسؤول المبيعات | sales_officer | sales123 |
+| المحاسب | accountant | account123 |
+| المندوب الميداني | field_rep | field123 |
 
-## Configuration
+## التكوين
 
-### Users
-- Warehouse Manager: Full inventory access
-- Purchase Officer: Purchase order management
-- Sales Officer: Sales order management
-- Accountant: Financial reporting
-- Field Representative: Limited access for field operations
+### المستخدمون
+- مسؤول المخازن: وصول كامل للمخازن
+- مسؤول المشتريات: إدارة أوامر الشراء
+- مسؤول المبيعات: إدارة أوامر البيع
+- المحاسب: التقارير المالية
+- المندوب الميداني: وصول محدود للعمليات الميدانية
 
-### Warehouses
-- Main Warehouse (WH-MAIN): Central storage
-- Purchase Warehouse (WH-PURCH): Incoming goods
-- Sales Warehouse (WH-SALES): Outgoing goods
+### المخازن
+- المخزن الرئيسي (WH-MAIN): التخزين المركزي
+- مخزن المشتريات (WH-PURCH): الوارد
+- مخزن المبيعات (WH-SALES): الصادر
 
-## Backup
+## النسخ الاحتياطي
 
-### Automatic Backup
-Daily backups are automatically created at 2:00 AM UTC and uploaded to Google Drive.
+### النسخ الاحتياطي التلقائي
+يتم إنشاء نسخ احتياطية تلقائياً يومياً في الساعة 2:00 صباحاً UTC ورفعها إلى Google Drive.
 
-### Manual Backup
+### النسخ الاحتياطي اليدوي
 ```bash
-# Backup to Google Drive
+# نسخ احتياطي إلى Google Drive
 /tmp/gdrive_backup.sh
 
-# Backup to local file
+# نسخ احتياطي إلى ملف محلي
 ./scripts/backup.sh
 ```
 
-### Restore from Backup
+### استعادة البيانات
 ```bash
-# Restore from Google Drive
+# استعادة من Google Drive
 /tmp/gdrive_restore.sh
 
-# Restore from local file
+# استعادة من ملف محلي
 ./scripts/restore.sh /path/to/backup.sql.gz
 ```
 
-## Monitoring
+## المراقبة
 
-Health checks run every 5 minutes. Alerts are sent when:
-- CPU usage exceeds 80%
-- Memory usage exceeds 80%
-- Disk usage exceeds 80%
-- Database connections exceed 100
+يتم فحص الحالة الصحية كل 5 دقائق. يتم إرسال تنبيهات عندما:
+- يتجاوز استخدام المعالج 80%
+- يتجاوز استخدام الذاكرة 80%
+- يتجاوز استخدام القرص 80%
+- يتجاوز عدد اتصالات قاعدة البيانات 100
 
-### Manual Health Check
+### فحص يدوي
 ```bash
 /tmp/odoo_health_check.sh
 ```
 
-### Performance Report
+### تقرير الأداء
 ```bash
 /tmp/odoo_performance_report.sh
 ```
 
-## Domain Setup
+## إعداد النطاق
 
-### Free Domain (DuckDNS)
+### نطاق مجاني (DuckDNS)
 ```bash
 bash scripts/setup-domain.sh
 ```
 
-This will:
-1. Guide you through DuckDNS account creation
-2. Configure your domain
-3. Set up automatic IP updates
+سيقوم هذا بـ:
+1. إرشادك لإنشاء حساب DuckDNS
+2. تكوين نطاقك
+3. إعداد تحديث IP تلقائي
 
-### Custom Domain
-If you have your own domain, you can use Certbot for SSL:
+### نطاق مخصص
+إذا كان لديك نطاق خاص بك، يمكنك استخدام Certbot للـ SSL:
 ```bash
 bash scripts/setup-ssl.sh
 ```
 
-## Alerts
+## التنبيهات
 
-### Slack Alerts
+### تنبيهات Slack
 ```bash
 bash scripts/setup-slack.sh
 ```
 
-This will:
-1. Guide you through Slack workspace creation
-2. Configure incoming webhooks
-3. Set up alert notifications
+سيقوم هذا بـ:
+1. إرشادك لإنشاء مساحة عمل Slack
+2. تكوين Webhooks الواردة
+3. إعداد إشعارات التنبيهات
 
-### Test Alerts
+### اختبار التنبيهات
 ```bash
 /tmp/test_slack.sh
 ```
 
-## Scheduled Tasks
+## المهام المجدولة
 
-The following tasks are automatically scheduled:
+يتم جدولة المهام التالية تلقائياً:
 
-| Task | Schedule | Description |
-|------|----------|-------------|
-| Backup | Daily 2:00 AM | Backup database to Google Drive |
-| Health Check | Every 5 minutes | Monitor system health |
-| Performance Report | Daily 6:00 AM | Generate performance metrics |
-| Domain Update | Every 5 minutes | Update DuckDNS IP address |
+| المهمة | الجدول | الوصف |
+|--------|--------|-------|
+| النسخ الاحتياطي | يومياً الساعة 2:00 صباحاً | نسخ قاعدة البيانات إلى Google Drive |
+| الفحص الصحي | كل 5 دقائق | مراقبة حالة النظام |
+| تقرير الأداء | يومياً الساعة 6:00 صباحاً | إنشاء مقاييس الأداء |
+| تحديث النطاق | كل 5 دقائق | تحديث IP DuckDNS |
 
-## File Structure
+## هيكل الملفات
 
 ```
 odoo-warehouse/
-├── .gitignore              # Git ignore file
-├── Dockerfile              # Docker configuration
-├── render.yaml             # Render deployment config
-├── README.md               # This file
-├── SETUP-GUIDE.md          # Detailed setup guide
+├── .gitignore              # ملف تجاهل Git
+├── Dockerfile              # تكوين Docker
+├── render.yaml             # تكوين نشر Render
+├── README.md               # هذا الملف
+├── SETUP-GUIDE.md          # دليل الإعداد التفصيلي
 └── scripts/
-    ├── init-odoo.sh        # Initialize Odoo
-    ├── setup-users.xml     # User configuration
-    ├── warehouse-config.xml # Warehouse configuration
-    ├── setup-reports.xml   # Reports configuration
-    ├── backup.sh           # Backup script
-    ├── restore.sh          # Restore script
-    ├── monitor.sh          # Monitoring script
-    ├── setup-odoo.py       # Odoo setup script
-    ├── setup-backup.py     # Backup setup
-    ├── setup-domain.py     # Domain setup
-    ├── setup-monitoring.py # Monitoring setup
-    ├── setup-domain.sh     # DuckDNS setup
-    ├── setup-slack.sh      # Slack setup
-    ├── setup-gdrive.sh     # Google Drive setup
-    ├── complete-setup.sh   # Complete setup script
-    └── final-setup.sh      # Final setup script
+    ├── init-odoo.sh        # تهيئة Odoo
+    ├── setup-users.xml     # تكوين المستخدمين
+    ├── warehouse-config.xml # تكوين المخازن
+    ├── setup-reports.xml   # تكوين التقارير
+    ├── backup.sh           # سكريبت النسخ الاحتياطي
+    ├── restore.sh          # سكريبت الاستعادة
+    ├── monitor.sh          # سكريبت المراقبة
+    ├── setup-odoo.py       # سكريبت إعداد Odoo
+    ├── setup-backup.py     # إعداد النسخ الاحتياطي
+    ├── setup-domain.py     # إعداد النطاق
+    ├── setup-monitoring.py # إعداد المراقبة
+    ├── setup-domain.sh     # إعداد DuckDNS
+    ├── setup-slack.sh      # إعداد Slack
+    ├── setup-gdrive.sh     # إعداد Google Drive
+    ├── complete-setup.sh   # سكريبت الإعداد الكامل
+    └── final-setup.sh      # الإعداد النهائي
 ```
 
-## Troubleshooting
+## استكشاف الأخطاء وإصلاحها
 
-### Odoo Not Starting
-1. Check Render logs
-2. Verify database connection
-3. Check disk space
+### Odoo لا يعمل
+1. سجلات Render
+2. التحقق من اتصال قاعدة البيانات
+3. مساحة القرص
 
-### Database Connection Issues
-1. Verify PostgreSQL is running
-2. Check credentials in environment variables
-3. Ensure database exists
+### مشاكل اتصال قاعدة البيانات
+1. التحقق من عمل PostgreSQL
+2. بيانات اعتماد البيئة
+3. التحقق من وجود قاعدة البيانات
 
-### Backup Failures
-1. Check Google Drive credentials
-2. Verify rclone configuration
-3. Check disk space
+### فشل النسخ الاحتياطي
+1. بيانات اعتماد Google Drive
+2. تكوين rclone
+3. مساحة القرص
 
-## Support
+## الدعم
 
-For issues or questions, please:
-1. Check the SETUP-GUIDE.md file
-2. Review Render logs
-3. Check system health: `/tmp/odoo_health_check.sh`
+للأسئلة أو المشاكل، يرجى:
+1. مراجعة ملف SETUP-GUIDE.md
+2. مراجعة سجلات Render
+3. فحص حالة النظام: `/tmp/odoo_health_check.sh`
 
-## License
+## الترخيص
 
-This project is open source and available for use by charitable organizations.
+هذا المشروع مفتوح المصدر ومتوفر لاستخدامه من قبل الجمعيات الخيرية.
 
-## Contributing
+## المساهمة
 
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+المساهمات مرحب بها! يرجى:
+1. استنساخ المستودع
+2. إنشاء فرع ميزة
+3. الالتزام بتغييراتك
+4. الدفع إلى الفرع
+5. إنشاء طلب سحب

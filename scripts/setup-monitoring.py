@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 """
-Odoo Monitoring Setup Script
-Configures system monitoring and alerts
+سكريبت إعداد المراقبة
+يُكوّن مراقبة النظام والتنبيهات
 """
 
 import os
 import json
 
 def create_monitoring_config():
-    """Create monitoring configuration"""
+    """إنشاء تكوين المراقبة"""
     config = {
         "monitoring_enabled": True,
-        "check_interval": 300,  # 5 minutes
+        "check_interval": 300,  # 5 دقائق
         "alerts": {
-            "email_enabled": False,
-            "email_recipients": [],
+            "email_enabled": True,
+            "email_recipients": ["islam.rihan@gmail.com"],
             "slack_enabled": False,
             "slack_webhook": ""
         },
@@ -29,100 +29,100 @@ def create_monitoring_config():
     with open('/tmp/odoo_monitoring_config.json', 'w') as f:
         json.dump(config, f, indent=4)
     
-    print("✅ Monitoring configuration created")
+    print("✅ تم إنشاء تكوين المراقبة")
     return config
 
 def create_health_check_script():
-    """Create health check script"""
+    """إنشاء سكريبت الفحص الصحي"""
     script = '''#!/bin/bash
-# Odoo Health Check Script
-# Monitors system health and sends alerts
+# سكريبت الفحص الصحي لـ Odoo
+# يراقب صحة النظام ويرسل تنبيهات
 
 set -e
 
-# Configuration
+# التكوين
 LOG_FILE="/tmp/odoo_health.log"
 ALERT_THRESHOLD_CPU=80
 ALERT_THRESHOLD_MEMORY=80
 ALERT_THRESHOLD_DISK=80
 
-# Get current timestamp
+# الحصول على الطابع الزمني الحالي
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
-# Check Odoo service
-echo "[$TIMESTAMP] Checking Odoo service..." >> $LOG_FILE
+# التحقق من خدمة Odoo
+echo "[$TIMESTAMP] فحص خدمة Odoo..." >> $LOG_FILE
 if curl -s -o /dev/null -w "%{http_code}" http://localhost:8069 | grep -q "200\|302"; then
-    echo "[$TIMESTAMP] ✅ Odoo is running" >> $LOG_FILE
+    echo "[$TIMESTAMP] ✅ Odoo يعمل" >> $LOG_FILE
 else
-    echo "[$TIMESTAMP] ❌ Odoo is not responding" >> $LOG_FILE
+    echo "[$TIMESTAMP] ❌ Odoo لا يستجيب" >> $LOG_FILE
 fi
 
-# Check database connection
-echo "[$TIMESTAMP] Checking database connection..." >> $LOG_FILE
+# التحقق من اتصال قاعدة البيانات
+echo "[$TIMESTAMP] فحص اتصال قاعدة البيانات..." >> $LOG_FILE
 if psql -h $HOST -U $USER -d $DB_NAME -c "SELECT 1;" > /dev/null 2>&1; then
-    echo "[$TIMESTAMP] ✅ Database connection OK" >> $LOG_FILE
+    echo "[$TIMESTAMP] ✅ اتصال قاعدة البيانات جيد" >> $LOG_FILE
 else
-    echo "[$TIMESTAMP] ❌ Database connection failed" >> $LOG_FILE
+    echo "[$TIMESTAMP] ❌ فشل اتصال قاعدة البيانات" >> $LOG_FILE
 fi
 
-# Check CPU usage
+# التحقق من استخدام المعالج
 CPU_USAGE=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}')
 if [ $(echo "$CPU_USAGE > $ALERT_THRESHOLD_CPU" | bc) -eq 1 ]; then
-    echo "[$TIMESTAMP] ⚠️ High CPU usage: $CPU_USAGE%" >> $LOG_FILE
+    echo "[$TIMESTAMP] ⚠️ استخدام معالج مرتفع: $CPU_USAGE%" >> $LOG_FILE
 fi
 
-# Check memory usage
+# التحقق من استخدام الذاكرة
 MEMORY_USAGE=$(free | grep Mem | awk '{print $3/$2 * 100.0}')
 if [ $(echo "$MEMORY_USAGE > $ALERT_THRESHOLD_MEMORY" | bc) -eq 1 ]; then
-    echo "[$TIMESTAMP] ⚠️ High memory usage: $MEMORY_USAGE%" >> $LOG_FILE
+    echo "[$TIMESTAMP] ⚠️ استخدام ذاكرة مرتفع: $MEMORY_USAGE%" >> $LOG_FILE
 fi
 
-# Check disk space
+# التحقق من مساحة القرص
 DISK_USAGE=$(df -h / | awk 'NR==2 {print $5}' | sed 's/%//')
 if [ $DISK_USAGE -gt $ALERT_THRESHOLD_DISK ]; then
-    echo "[$TIMESTAMP] ⚠️ High disk usage: $DISK_USAGE%" >> $LOG_FILE
+    echo "[$TIMESTAMP] ⚠️ استخدام قرص مرتفع: $DISK_USAGE%" >> $LOG_FILE
 fi
 
-echo "[$TIMESTAMP] Health check completed" >> $LOG_FILE
+echo "[$TIMESTAMP] تم الانتهاء من الفحص الصحي" >> $LOG_FILE
 '''
     
     with open('/tmp/odoo_health_check.sh', 'w') as f:
         f.write(script)
     
     os.chmod('/tmp/odoo_health_check.sh', 0o755)
-    print("✅ Health check script created")
+    print("✅ تم إنشاء سكريبت الفحص الصحي")
 
 def create_alert_script():
-    """Create alert notification script"""
+    """إنشاء سكريبت إشعارات التنبيه"""
     script = '''#!/bin/bash
-# Odoo Alert Notification Script
-# Sends alerts when issues are detected
+# سكريبت إشعارات التنبيه لـ Odoo
+# يرسل تنبيهات عند اكتشاف مشاكل
 
 set -e
 
-# Configuration
+# التكوين
 LOG_FILE="/tmp/odoo_health.log"
-ALERT_EMAIL="admin@example.com"
+ALERT_EMAIL="islam.rihan@gmail.com"
 SLACK_WEBHOOK=""
 
-# Check for alerts in log
+# التحقق من التنبيهات في السجل
 ALERTS=$(grep "⚠️\|❌" $LOG_FILE | tail -20)
 
 if [ -n "$ALERTS" ]; then
-    echo "=== Odoo System Alerts ==="
-    echo "Date: $(date)"
+    echo "=== تنبيهات حالة نظام Odoo ==="
+    echo "التاريخ: $(date)"
     echo ""
     echo "$ALERTS"
     
-    # Send email alert (if configured)
+    # إرسال تنبيه بالبريد الإلكتروني (إذا كان مكوناً)
     if [ -n "$ALERT_EMAIL" ]; then
-        echo "$ALERTS" | mail -s "Odoo System Alert" $ALERT_EMAIL
+        echo "$ALERTS" | mail -s "تنبيه حالة نظام Odoo" $ALERT_EMAIL
     fi
     
-    # Send Slack alert (if configured)
+    # إرسال تنبيه Slack (إذا كان مكوناً)
     if [ -n "$SLACK_WEBHOOK" ]; then
-        curl -X POST -H 'Content-type: application/json' \
-            --data "{\"text\":\"Odoo System Alert:\\n$ALERTS\"}" \
+        curl -X POST -H 'Content-type: application/json' \\
+            --data "{\"text\":\"تنبيه حالة نظام Odoo:\\n$ALERTS\"}" \\
             $SLACK_WEBHOOK
     fi
 fi
@@ -132,50 +132,50 @@ fi
         f.write(script)
     
     os.chmod('/tmp/odoo_alert.sh', 0o755)
-    print("✅ Alert script created")
+    print("✅ تم إنشاء سكريبت التنبيه")
 
 def create_performance_report():
-    """Create performance report script"""
+    """إنشاء سكريبت تقرير الأداء"""
     script = '''#!/bin/bash
-# Odoo Performance Report
-# Generates daily performance metrics
+# تقرير أداء Odoo
+# ينشئ مقاييس أداء يومية
 
 set -e
 
-# Configuration
+# التكوين
 REPORT_DIR="/tmp/odoo_reports"
 DATE=$(date +%Y%m%d)
 REPORT_FILE="$REPORT_DIR/performance_$DATE.txt"
 
-# Create report directory
+# إنشاء مجلد التقارير
 mkdir -p $REPORT_DIR
 
-# Generate report
-echo "=== Odoo Performance Report ===" > $REPORT_FILE
-echo "Date: $(date)" >> $REPORT_FILE
+# إنشاء التقرير
+echo "=== تقرير أداء Odoo ===" > $REPORT_FILE
+echo "التاريخ: $(date)" >> $REPORT_FILE
 echo "" >> $REPORT_FILE
 
-echo "=== System Resources ===" >> $REPORT_FILE
-echo "CPU Usage:" >> $REPORT_FILE
+echo "=== موارد النظام ===" >> $REPORT_FILE
+echo "استخدام المعالج:" >> $REPORT_FILE
 top -bn1 | grep "Cpu(s)" >> $REPORT_FILE
 echo "" >> $REPORT_FILE
 
-echo "Memory Usage:" >> $REPORT_FILE
+echo "استخدام الذاكرة:" >> $REPORT_FILE
 free -h >> $REPORT_FILE
 echo "" >> $REPORT_FILE
 
-echo "Disk Usage:" >> $REPORT_FILE
+echo "استخدام القرص:" >> $REPORT_FILE
 df -h / >> $REPORT_FILE
 echo "" >> $REPORT_FILE
 
-echo "=== Database Statistics ===" >> $REPORT_FILE
+echo "=== إحصائيات قاعدة البيانات ===" >> $REPORT_FILE
 psql -h $HOST -U $USER -d $DB_NAME -c "SELECT count(*) as total_users FROM res_users;" >> $REPORT_FILE
-psql -h $HOST -U $USER -d $DB_NAME -c "SELECT count(*) as total_products FROM product_template;" >> $REPORT_FILE
+psql -h $HOST -U $USER -d $REPORT_FILE -c "SELECT count(*) as total_products FROM product_template;" >> $REPORT_FILE
 psql -h $HOST -U $USER -d $DB_NAME -c "SELECT count(*) as total_stock_moves FROM stock_move WHERE state='done';" >> $REPORT_FILE
 echo "" >> $REPORT_FILE
 
-echo "=== Report Complete ===" >> $REPORT_FILE
-echo "Report saved to: $REPORT_FILE"
+echo "=== اكتمل التقرير ===" >> $REPORT_FILE
+echo "تم حفظ التقرير في: $REPORT_FILE"
 
 cat $REPORT_FILE
 '''
@@ -184,23 +184,23 @@ cat $REPORT_FILE
         f.write(script)
     
     os.chmod('/tmp/odoo_performance_report.sh', 0o755)
-    print("✅ Performance report script created")
+    print("✅ تم إنشاء سكريبت تقرير الأداء")
 
 def main():
-    """Main monitoring setup function"""
-    print("=== Setting up Monitoring System ===")
+    """الدالة الرئيسية لإعداد المراقبة"""
+    print("=== إعداد نظام المراقبة ===")
     
     create_monitoring_config()
     create_health_check_script()
     create_alert_script()
     create_performance_report()
     
-    print("\n=== Monitoring Setup Complete ===")
-    print("Next steps:")
-    print("1. Configure alert recipients")
-    print("2. Set up Slack integration (optional)")
-    print("3. Schedule health checks")
-    print("4. Review performance reports")
+    print("\n=== تم إعداد المراقبة ===")
+    print("الخطوات التالية:")
+    print("1. تكوين مستلمي التنبيهات")
+    print("2. إعداد تكامل Slack (اختياري)")
+    print("3. جدولة الفحوصات الصحية")
+    print("4. مراجعة تقارير الأداء")
 
 if __name__ == "__main__":
     main()

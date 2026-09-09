@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data noupdate="1">
-        <!-- Stock Summary Report -->
+        <!-- تقرير ملخص المخزون -->
         <record id="action_stock_summary_report" model="ir.actions.server">
-            <field name="name">Stock Summary Report</field>
+            <field name="name">تقرير ملخص المخزون</field>
             <field name="model_id" ref="stock.model_stock_quant"/>
             <field name="state">code</field>
             <field name="code">
                 action = {
                     'type': 'ir.actions.act_window',
-                    'name': 'Stock Summary',
+                    'name': 'ملخص المخزون',
                     'res_model': 'stock.quant',
                     'view_mode': 'tree,form',
                     'domain': [('quantity', '>', 0)],
@@ -18,15 +18,15 @@
             </field>
         </record>
 
-        <!-- Incoming Shipments Report -->
+        <!-- تقرير الواردات -->
         <record id="action_incoming_shipments_report" model="ir.actions.server">
-            <field name="name">Incoming Shipments Report</field>
+            <field name="name">تقرير الواردات</field>
             <field name="model_id" ref="stock.model_stock_picking"/>
             <field name="state">code</field>
             <field name="code">
                 action = {
                     'type': 'ir.actions.act_window',
-                    'name': 'Incoming Shipments',
+                    'name': 'الواردات',
                     'res_model': 'stock.picking',
                     'view_mode': 'tree,form',
                     'domain': [('picking_type_code', '=', 'incoming')],
@@ -35,15 +35,15 @@
             </field>
         </record>
 
-        <!-- Outgoing Shipments Report -->
+        <!-- تقرير الصادرات -->
         <record id="action_outgoing_shipments_report" model="ir.actions.server">
-            <field name="name">Outgoing Shipments Report</field>
+            <field name="name">تقرير الصادرات</field>
             <field name="model_id" ref="stock.model_stock_picking"/>
             <field name="state">code</field>
             <field name="code">
                 action = {
                     'type': 'ir.actions.act_window',
-                    'name': 'Outgoing Shipments',
+                    'name': 'الصادرات',
                     'res_model': 'stock.picking',
                     'view_mode': 'tree,form',
                     'domain': [('picking_type_code', '=', 'outgoing')],
@@ -52,15 +52,15 @@
             </field>
         </record>
 
-        <!-- Inventory Valuation Report -->
+        <!-- تقرير تقدير المخزون -->
         <record id="action_inventory_valuation_report" model="ir.actions.server">
-            <field name="name">Inventory Valuation Report</field>
+            <field name="name">تقرير تقدير المخزون</field>
             <field name="model_id" ref="stock.model_stock_quant"/>
             <field name="state">code</field>
             <field name="code">
                 action = {
                     'type': 'ir.actions.act_window',
-                    'name': 'Inventory Valuation',
+                    'name': 'تقدير المخزون',
                     'res_model': 'stock.quant',
                     'view_mode': 'tree,form',
                     'domain': [('quantity', '>', 0)],
@@ -69,15 +69,15 @@
             </field>
         </record>
 
-        <!-- Stock Movement History -->
+        <!-- سجل حركة المخزون -->
         <record id="action_stock_movement_history" model="ir.actions.server">
-            <field name="name">Stock Movement History</field>
+            <field name="name">سجل حركة المخزون</field>
             <field name="model_id" ref="stock.model_stock_move"/>
             <field name="state">code</field>
             <field name="code">
                 action = {
                     'type': 'ir.actions.act_window',
-                    'name': 'Stock Movements',
+                    'name': 'حركات المخزون',
                     'res_model': 'stock.move',
                     'view_mode': 'tree,form',
                     'domain': [('state', '=', 'done')],
@@ -86,15 +86,15 @@
             </field>
         </record>
 
-        <!-- Low Stock Alert -->
+        <!-- تنبيه المخزون المنخفض -->
         <record id="action_low_stock_alert" model="ir.actions.server">
-            <field name="name">Low Stock Alert</field>
+            <field name="name">تنبيه المخزون المنخفض</field>
             <field name="model_id" ref="stock.model_stock_quant"/>
             <field name="state">code</field>
             <field name="code">
                 action = {
                     'type': 'ir.actions.act_window',
-                    'name': 'Low Stock Alert',
+                    'name': 'تنبيه المخزون المنخفض',
                     'res_model': 'stock.quant',
                     'view_mode': 'tree,form',
                     'domain': [('quantity', '&lt;', 10), ('quantity', '>', 0)],

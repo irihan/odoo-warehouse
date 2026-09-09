@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Odoo Backup Setup Script
-Configures automatic daily backups
+سكريبت إعداد النسخ الاحتياطي
+يُكوّن النسخ الاحتياطي التلقائي اليومي
 """
 
 import os
@@ -9,131 +9,136 @@ import json
 from datetime import datetime
 
 def create_backup_config():
-    """Create backup configuration file"""
+    """إنشاء ملف تكوين النسخ الاحتياطي"""
     config = {
         "backup_enabled": True,
-        "backup_schedule": "0 2 * * *",  # Daily at 2:00 AM
+        "backup_schedule": "0 2 * * *",  # يومياً الساعة 2:00 صباحاً
         "backup_retention_days": 7,
         "backup_location": "/tmp/backups",
         "backup_database": True,
         "backup_filestore": True,
         "backup_compress": True,
-        "backup_upload_cloud": False,
-        "cloud_provider": None,
-        "cloud_bucket": None
+        "backup_upload_cloud": True,
+        "cloud_provider": "Google Drive",
+        "cloud_account": "islam.rihan@gmail.com",
+        "cloud_bucket": "Odoo-Backups"
     }
     
     with open('/tmp/odoo_backup_config.json', 'w') as f:
         json.dump(config, f, indent=4)
     
-    print("✅ Backup configuration created")
+    print("✅ تم إنشاء تكوين النسخ الاحتياطي")
     return config
 
 def create_backup_script():
-    """Create automated backup script"""
+    """إنشاء سكريبت النسخ الاحتياطي التلقائي"""
     script = '''#!/bin/bash
-# Automated Odoo Backup Script
-# Runs daily at 2:00 AM UTC
+# سكريبت النسخ الاحتياطي التلقائي
+# يعمل يومياً الساعة 2:00 صباحاً UTC
 
 set -e
 
-# Configuration
+# التكوين
 BACKUP_DIR="/tmp/backups"
 DATE=$(date +%Y%m%d_%H%M%S)
 BACKUP_FILE="$BACKUP_DIR/odoo_backup_$DATE.sql.gz"
 RETENTION_DAYS=7
 
-# Create backup directory
+# إنشاء مجلد النسخ الاحتياطي
 mkdir -p $BACKUP_DIR
 
-# Create database backup
-echo "Creating database backup..."
+# إنشاء نسخة احتياطية من قاعدة البيانات
+echo "إنشاء نسخة احتياطية من قاعدة البيانات..."
 pg_dump -h $HOST -U $USER -d $DB_NAME | gzip > $BACKUP_FILE
 
-# Check backup size
+# التحقق من حجم النسخة الاحتياطية
 BACKUP_SIZE=$(du -h $BACKUP_FILE | cut -f1)
-echo "Backup created: $BACKUP_FILE (Size: $BACKUP_SIZE)"
+echo "تم إنشاء النسخة الاحتياطية: $BACKUP_FILE (الحجم: $BACKUP_SIZE)"
 
-# Remove old backups
-echo "Cleaning old backups..."
+# الرفع إلى Google Drive
+echo "الرفع إلى Google Drive..."
+rclone copy $BACKUP_FILE gdrive:Odoo-Backups/
+
+# حذف النسخ القديمة
+echo "حذف النسخ القديمة..."
 find $BACKUP_DIR -name "odoo_backup_*.sql.gz" -mtime +$RETENTION_DAYS -delete
 
-# List current backups
-echo "Current backups:"
+# عرض النسخ الحالية
+echo "النسخ الحالية:"
 ls -lh $BACKUP_DIR/odoo_backup_*.sql.gz
 
-echo "Backup completed successfully!"
+echo "تم النسخ الاحتياطي بنجاح!"
 '''
     
     with open('/tmp/odoo_backup.sh', 'w') as f:
         f.write(script)
     
     os.chmod('/tmp/odoo_backup.sh', 0o755)
-    print("✅ Backup script created")
+    print("✅ تم إنشاء سكريبت النسخ الاحتياطي")
 
 def create_restore_script():
-    """Create restore script"""
+    """إنشاء سكريبت الاستعادة"""
     script = '''#!/bin/bash
-# Odoo Restore Script
-# Usage: ./restore.sh /path/to/backup.sql.gz
+# سكريبت استعادة Odoo
+# الاستخدام: ./restore.sh /path/to/backup.sql.gz
 
 set -e
 
 if [ -z "$1" ]; then
-    echo "Usage: $0 /path/to/backup.sql.gz"
+    echo "الاستخدام: $0 /path/to/backup.sql.gz"
     exit 1
 fi
 
 BACKUP_FILE=$1
 
 if [ ! -f $BACKUP_FILE ]; then
-    echo "Error: Backup file not found!"
+    echo "خطأ: ملف النسخة الاحتياطي غير موجود!"
     exit 1
 fi
 
-echo "Restoring from: $BACKUP_FILE"
+echo "الاستعادة من: $BACKUP_FILE"
 
-# Decompress if needed
+# فك الضغط إذا لزم الأمر
 if [[ $BACKUP_FILE == *.gz ]]; then
-    echo "Decompressing backup..."
+    echo "فك ضغط النسخة الاحتياطية..."
     gunzip -c $BACKUP_FILE > /tmp/odoo_restore.sql
     RESTORE_FILE="/tmp/odoo_restore.sql"
 else
     RESTORE_FILE=$BACKUP_FILE
 fi
 
-# Restore database
-echo "Restoring database..."
+# استعادة قاعدة البيانات
+echo "استعادة قاعدة البيانات..."
 psql -h $HOST -U $USER -d $DB_NAME < $RESTORE_FILE
 
-# Cleanup
+# التنظيف
 if [ -f "/tmp/odoo_restore.sql" ]; then
     rm /tmp/odoo_restore.sql
 fi
 
-echo "Restore completed successfully!"
-echo "Please restart Odoo service for changes to take effect."
+echo "تمت الاستعادة بنجاح!"
+echo "يرجى إعادة تشغيل خدمة Odoo لتطبيق التغييرات."
 '''
     
     with open('/tmp/odoo_restore.sh', 'w') as f:
         f.write(script)
     
     os.chmod('/tmp/odoo_restore.sh', 0o755)
-    print("✅ Restore script created")
+    print("✅ تم إنشاء سكريبت الاستعادة")
 
 def main():
-    """Main setup function"""
-    print("=== Setting up Backup System ===")
+    """الدالة الرئيسية للإعداد"""
+    print("=== إعداد نظام النسخ الاحتياطي ===")
     
     create_backup_config()
     create_backup_script()
     create_restore_script()
     
-    print("\n=== Backup Setup Complete ===")
-    print("Next steps:")
-    print("1. Configure backup location")
-    print("2. Set up cloud storage (optional)")
-    print "3. Test backup and restore")
+    print("\n=== تم إعداد النسخ الاحتياطي ===")
+    print("الخطوات التالية:")
+    print("1. تحديد موقع النسخ الاحتياطي")
+    print("2. إعداد التخزين السحابي (اختياري)")
+    print("3. اختبار النسخ الاحتياطي والاستعادة")
 
 if __name__ == "__main__":
     main()

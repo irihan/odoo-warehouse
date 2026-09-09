@@ -1,66 +1,66 @@
 #!/usr/bin/env python3
 """
-Odoo Domain Setup Script
-Configures custom domain with SSL
+سكريبت إعداد النطاق
+يُكوّن نطاق مخصص مع SSL مجاني
 """
 
 import os
 import subprocess
 
 def setup_duckdns():
-    """Setup free DuckDNS domain"""
-    print("=== Setting up DuckDNS Domain ===")
-    print("DuckDNS provides free domains like: yourname.duckdns.org")
+    """إعداد نطاق DuckDNS المجاني"""
+    print("=== إعداد نطاق DuckDNS المجاني ===")
+    print("يوفر DuckDNS نطاقات مجانية مثل: yourname.duckdns.org")
     print("")
-    print("Steps:")
-    print("1. Go to https://www.duckdns.org")
-    print("2. Login with GitHub/Google/Facebook")
-    print("3. Create a new domain: yourname.duckdns.org")
-    print("4. Copy the token")
+    print("الخطوات:")
+    print("1. اذهب إلى: https://www.duckdns.org")
+    print("2. سجل الدخول عبر GitHub/Google/Facebook")
+    print("3. أنشئ نطاقاً جديداً: yourname.duckdns.org")
+    print("4. انسخ الرمز المميز")
     print("")
     
-    token = input("Enter your DuckDNS token: ")
-    domain = input("Enter your domain (e.g., mywarehouse): ")
+    token = input("أدخل رمز DuckDNS المميز: ")
+    domain = input("أدخل اسم النطاق (مثال: mywarehouse): ")
     
-    # Create update script
+    # إنشاء سكريبت التحديث
     script = f'''#!/bin/bash
-# DuckDNS Update Script
-# Updates IP address automatically
+# سكريبت تحديث DuckDNS
+# يحدث عنوان IP تلقائياً
 
-echo "Updating DuckDNS IP..."
+echo "تحديث IP DuckDNS..."
 curl "https://www.duckdns.org/update?domains={domain}&token={token}&ip="
 
-echo "Domain updated: {domain}.duckdns.org"
+echo "تم تحديث النطاق: {domain}.duckdns.org"
 '''
     
     with open('/tmp/duckdns_update.sh', 'w') as f:
         f.write(script)
     
     os.chmod('/tmp/duckdns_update.sh', 0o755)
-    print(f"✅ DuckDNS update script created: /tmp/duckdns_update.sh")
+    print(f"✅ تم إنشاء سكريبت تحديث DuckDNS: /tmp/duckdns_update.sh")
     
     return f"{domain}.duckdns.org"
 
 def setup_cloudflare_tunnel():
-    """Setup Cloudflare Tunnel for HTTPS"""
-    print("\n=== Setting up Cloudflare Tunnel ===")
-    print("Cloudflare provides free HTTPS for your domain")
+    """إعداد Cloudflare Tunnel للـ HTTPS"""
+    print("\n=== إعداد Cloudflare Tunnel ===")
+    print("يوفر Cloudflare HTTPS مجاني لنطاقك")
     print("")
-    print("Steps:")
-    print("1. Go to https://dash.cloudflare.com")
-    print("2. Sign up for free account")
-    print("3. Add your domain")
-    print("4. Get tunnel token")
+    print("الخطوات:")
+    print("1. اذهب إلى: https://dash.cloudflare.com")
+    print("2. سجل حساب مجاني")
+    print("3. أضف نطاقك")
+    print("4. احصل على رمز النفق")
     print("")
     
-    token = input("Enter your Cloudflare tunnel token (or press Enter to skip): ")
+    token = input("أدخل رمز Cloudflare tunnel (أو اضغط Enter للتخطي): ")
     
     if token:
         script = f'''#!/bin/bash
-# Cloudflare Tunnel Setup
-# Provides free HTTPS for your domain
+# إعداد Cloudflare Tunnel
+# يوفر HTTPS مجاني لنطاقك
 
-echo "Starting Cloudflare tunnel..."
+echo "بدء تشغيل Cloudflare tunnel..."
 cloudflared tunnel run --token {token}
 '''
         
@@ -68,72 +68,72 @@ cloudflared tunnel run --token {token}
             f.write(script)
         
         os.chmod('/tmp/cloudflare_tunnel.sh', 0o755)
-        print("✅ Cloudflare tunnel script created: /tmp/cloudflare_tunnel.sh")
+        print("✅ تم إنشاء سكريبت Cloudflare tunnel: /tmp/cloudflare_tunnel.sh")
         return True
     else:
-        print("⏭️ Skipping Cloudflare setup")
+        print("⏭️ تخطي إعداد Cloudflare")
         return False
 
 def setup_ssl_certbot():
-    """Setup SSL with Certbot (if using own domain)"""
-    print("\n=== Setting up SSL with Certbot ===")
-    print("Certbot provides free SSL certificates")
+    """إعداد SSL بـ Certbot (إذا كنت تستخدم نطاقاً خاصاً)"""
+    print("\n=== إعداد SSL بـ Certbot ===")
+    print("يوفر Certbot شهادات SSL مجانية")
     print("")
-    print("Prerequisites:")
-    print("- Domain pointing to your server")
-    print("- Nginx or Apache installed")
+    print("المتطلبات:")
+    print("- النطاق يشير إلى خادمك")
+    print("- Nginx أو Apache مثبت")
     print("")
     
-    domain = input("Enter your domain (or press Enter to skip): ")
+    domain = input("أدخل نطاقك (أو اضغط Enter للتخطي): ")
     
     if domain:
         script = f'''#!/bin/bash
-# Certbot SSL Setup
-# Provides free SSL certificates
+# إعداد SSL بـ Certbot
+# يوفر شهادات SSL مجانية
 
-echo "Installing Certbot..."
+echo "تثبيت Certbot..."
 sudo apt update
 sudo apt install -y certbot python3-certbot-nginx
 
-echo "Obtaining SSL certificate..."
+echo "الحصول على شهادة SSL..."
 sudo certbot --nginx -d {domain} --non-interactive --agree-tos --email admin@{domain}
 
-echo "SSL certificate installed for {domain}"
-echo "Auto-renewal configured"
+echo "تم تثبيت شهادة SSL لـ {domain}"
+echo "تم تكوين التجديد التلقائي"
 '''
         
         with open('/tmp/setup_ssl.sh', 'w') as f:
             f.write(script)
         
         os.chmod('/tmp/setup_ssl.sh', 0o755)
-        print(f"✅ SSL setup script created: /tmp/setup_ssl.sh")
+        print(f"✅ تم إنشاء سكريبت إعداد SSL: /tmp/setup_ssl.sh")
         return True
     else:
-        print("⏭️ Skipping SSL setup")
+        print("⏭️ تخطي إعداد SSL")
         return False
 
 def main():
-    """Main domain setup function"""
-    print("=== Domain Setup for Odoo Warehouse ===")
+    """الدالة الرئيسية لإعداد النطاق"""
+    print("=== إعداد النطاق لنظام إدارة المخازن ===")
     print("")
     
-    # Setup free domain
+    # إعداد نطاق مجاني
     domain = setup_duckdns()
     
-    # Setup Cloudflare Tunnel
+    # إعداد Cloudflare Tunnel
     cloudflare = setup_cloudflare_tunnel()
     
-    # Setup SSL (optional)
+    # إعداد SSL (اختياري)
     ssl = setup_ssl_certbot()
     
-    print("\n=== Domain Setup Complete ===")
-    print(f"Your domain: {domain}")
+    print("\n=== تم إعداد النطاق بنجاح ===")
+    print(f"نطاقك: {domain}")
     if cloudflare:
-        print("HTTPS: Enabled (via Cloudflare)")
+        print("HTTPS: مفعّل (عبر Cloudflare)")
     if ssl:
-        print("SSL: Enabled (via Certbot)")
+        print("SSL: مفعّل (عبر Certbot)")
     print("")
-    print("Access your Odoo at:")
+    print("الوصول إلى Odoo على:")
     print(f"  http://{domain}")
     if cloudflare or ssl:
         print(f"  https://{domain}")

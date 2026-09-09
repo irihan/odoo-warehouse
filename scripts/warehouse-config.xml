@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data noupdate="1">
-        <!-- Main Warehouse -->
+        <!-- المخزن الرئيسي -->
         <record id="main_warehouse" model="stock.warehouse">
-            <field name="name">Main Warehouse</field>
+            <field name="name">المخزن الرئيسي</field>
             <field name="code">WH-MAIN</field>
             <field name="company_id" ref="base.main_company"/>
         </record>
 
-        <!-- Purchase Warehouse -->
+        <!-- مخزن المشتريات -->
         <record id="purchase_warehouse" model="stock.warehouse">
-            <field name="name">Purchase Warehouse</field>
+            <field name="name">مخزن المشتريات</field>
             <field name="code">WH-PURCH</field>
             <field name="company_id" ref="base.main_company"/>
         </record>
 
-        <!-- Sales Warehouse -->
+        <!-- مخزن المبيعات -->
         <record id="sales_warehouse" model="stock.warehouse">
-            <field name="name">Sales Warehouse</field>
+            <field name="name">مخزن المبيعات</field>
             <field name="code">WH-SALES</field>
             <field name="company_id" ref="base.main_company"/>
         </record>
 
-        <!-- Locations -->
+        <!-- المواقع -->
         <record id="location_main" model="stock.location">
-            <field name="name">Main Location</field>
-            <field name="complete_name">WH-MAIN/Stock</field>
+            <field name="name">الموقع الرئيسي</field>
+            <field name="complete_name">WH-MAIN/المخزون</field>
             <field name="usage">internal</field>
             <field name="warehouse_id" ref="main_warehouse"/>
         </record>
 
         <record id="location_purchase" model="stock.location">
-            <field name="name">Purchase Location</field>
-            <field name="complete_name">WH-PURCH/Stock</field>
+            <field name="name">موقع المشتريات</field>
+            <field name="complete_name">WH-PURCH/المخزون</field>
             <field name="usage">internal</field>
             <field name="warehouse_id" ref="purchase_warehouse"/>
         </record>
 
         <record id="location_sales" model="stock.location">
-            <field name="name">Sales Location</field>
-            <field name="complete_name">WH-SALES/Stock</field>
+            <field name="name">موقع المبيعات</field>
+            <field name="complete_name">WH-SALES/المخزون</field>
             <field name="usage">internal</field>
             <field name="warehouse_id" ref="sales_warehouse"/>
         </record>
 
-        <!-- Operation Types -->
+        <!-- أنواع العمليات -->
         <record id="operation_receive" model="stock.picking.type">
-            <field name="name">Receive Products</field>
+            <field name="name">استلام المنتجات</field>
             <field name="code">incoming</field>
             <field name="warehouse_id" ref="main_warehouse"/>
         </record>
 
         <record id="operation_deliver" model="stock.picking.type">
-            <field name="name">Deliver Products</field>
+            <field name="name">تسليم المنتجات</field>
             <field name="code">outgoing</field>
             <field name="warehouse_id" ref="main_warehouse"/>
         </record>
 
         <record id="operation_internal" model="stock.picking.type">
-            <field name="name">Internal Transfers</field>
+            <field name="name">التحويلات الداخلية</field>
             <field name="code">internal</field>
             <field name="warehouse_id" ref="main_warehouse"/>
         </record>

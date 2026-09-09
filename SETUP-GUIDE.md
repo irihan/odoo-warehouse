@@ -1,114 +1,116 @@
-# Odoo Warehouse Management System - Complete Setup Guide
+# دليل الإعداد التفصيلي - نظام إدارة المخازن
 
-## System Overview
-This is a complete warehouse management system for a charitable organization with 5 users.
+## نظرة عامة على النظام
 
-## User Roles
-| Role | Login | Password | Access Level |
-|------|-------|----------|--------------|
-| Admin | admin@example.com | admin | Full Access |
-| Warehouse Manager | warehouse_manager | warehouse123 | Inventory Only |
-| Purchase Officer | purchase_officer | purchase123 | Purchases |
-| Sales Officer | sales_officer | sales123 | Sales |
-| Accountant | accountant | account123 | Accounting |
-| Field Representative | field_rep | field123 | Limited Access |
+نظام إدارة مخازن متكامل للجمعيات الخيرية مع 5 مستخدمين.
 
-## Warehouse Structure
+## أدوار المستخدمين
+
+| الدور | تسجيل الدخول | كلمة المرور | مستوى الوصول |
+|-------|--------------|-------------|--------------|
+| مسؤول المخازن | warehouse_manager | warehouse123 | وصول كامل للمخازن |
+| مسؤول المشتريات | purchase_officer | purchase123 | إدارة أوامر الشراء |
+| مسؤول المبيعات | sales_officer | sales123 | إدارة أوامر البيع |
+| المحاسب | accountant | account123 | التقارير المالية |
+| المندوب الميداني | field_rep | field123 | وصول محدود |
+
+## هيكل المخازن
+
 ```
-Main Warehouse (WH-MAIN)
-├── Purchase Warehouse (WH-PURCH)
-└── Sales Warehouse (WH-SALES)
+المخزن الرئيسي (WH-MAIN)
+├── مخزن المشتريات (WH-PURCH)
+└── مخزن المبيعات (WH-SALES)
 ```
 
-## Configuration Steps
+## خطوات الإعداد
 
-### Step 1: Install Required Apps
-1. Go to Apps
-2. Install the following modules:
-   - Inventory
-   - Purchase
-   - Sales
-   - Accounting
-   - Employees
+### الخطوة 1: تثبيت التطبيقات المطلوبة
+1. اذهب إلى "التطبيقات"
+2. ثبّت الوحدات التالية:
+   - المخازن
+   - المشتريات
+   - المبيعات
+   - المحاسبة
+   - الموظفون
 
-### Step 2: Configure Users
-1. Go to Settings → Users
-2. Create the 5 users as listed above
-3. Assign appropriate groups to each user
+### الخطوة 2: تكوين المستخدمين
+1. اذهب إلى الإعدادات → المستخدمون
+2. أنشئ المستخدمين الخمسة كما هو محدد أعلاه
+3. حدد المجموعات المناسبة لكل مستخدم
 
-### Step 3: Configure Warehouses
-1. Go to Inventory → Configuration → Warehouses
-2. Create the 3 warehouses as listed above
-3. Set up locations for each warehouse
+### الخطوة 3: تكوين المخازن
+1. اذهب إلى المخازن → التكوين → المخازن
+2. أنشئ المخازن الثلاثة كما هو محدد أعلاه
+3. حدد المواقع لكل مخزن
 
-### Step 4: Configure Operation Types
-1. Go to Inventory → Configuration → Operation Types
-2. Create operation types for:
-   - Receive Products
-   - Deliver Products
-   - Internal Transfers
+### الخطوة 4: تكوين أنواع العمليات
+1. اذهب إلى المخازن → التكوين → أنواع العمليات
+2. أنشئ أنواع عمليات لـ:
+   - استلام المنتجات
+   - تسليم المنتجات
+   - التحويلات الداخلية
 
-### Step 5: Add Products
-1. Go to Inventory → Configuration → Products
-2. Add all charity products
-3. Set minimum stock levels
+### الخطوة 5: إضافة المنتجات
+1. اذهب إلى المخازن → التكوين → المنتجات
+2. أضف جميع منتجات الجمعية
+3. حدد الحد الأدنى للمخزون
 
-### Step 6: Test the System
-1. Test receiving products
-2. Test delivering products
-3. Test internal transfers
-4. Test inventory adjustments
+### الخطوة 6: اختبار النظام
+1. اختبر استلام المنتجات
+2. اختبر تسليم المنتجات
+3. اختبر التحويلات الداخلية
+4. اختبر تعديلات المخزون
 
-## Daily Operations
+## العمليات اليومية
 
-### Receiving Products
-1. Go to Inventory → Receipts
-2. Create new receipt
-3. Select supplier
-4. Add products
-5. Validate receipt
+### استلام المنتجات
+1. اذهب إلى المخازن → الاستلامات
+2. أنشئ استلام جديد
+3. حدد المورد
+4. أضف المنتجات
+5. تأكيد الاستلام
 
-### Delivering Products
-1. Go to Inventory → Delivery Orders
-2. Create new delivery
-3. Select customer
-4. Add products
-5. Validate delivery
+### تسليم المنتجات
+1. اذهب إلى المخازن → أوامر التسليم
+2. أنشئ تسليم جديد
+3. حدد العميل
+4. أضف المنتجات
+5. تأكيد التسليم
 
-### Internal Transfers
-1. Go to Inventory → Internal Transfers
-2. Create new transfer
-3. Select source and destination locations
-4. Add products
-5. Validate transfer
+### التحويلات الداخلية
+1. اذهب إلى المخازن → التحويلات الداخلية
+2. أنشئ تحويل جديد
+3. حدد المواقع المصدر والوجهة
+4. أضف المنتجات
+5. تأكيد التحويل
 
-### Inventory Count
-1. Go to Inventory → Inventory Adjustments
-2. Create new adjustment
-3. Count physical inventory
-4. Update system quantities
-5. Validate adjustment
+### جرد المخزون
+1. اذهب إلى المخازن → تعديلات المخزون
+2. أنشئ تعديل جديد
+3. عد المخزون الفعلي
+4. حدّث كميات النظام
+5. تأكيد التعديل
 
-## Reports
+## التقارير
 
-### Daily Reports
-- Stock Summary
-- Incoming Shipments
-- Outgoing Shipments
+### تقارير يومية
+- ملخص المخزون
+- الواردات
+- الصادرات
 
-### Weekly Reports
-- Inventory Valuation
-- Stock Movement History
+### تقارير أسبوعية
+- تقدير المخزون
+- سجل حركة المخزون
 
-### Monthly Reports
-- Full Inventory Report
-- Stock Reconciliation
-- Variance Report
+### تقارير شهرية
+- تقرير المخزون الكامل
+- تسوية المخزون
+- تقرير الفروقات
 
-## Backup Schedule
-- Daily: 2:00 AM UTC
-- Weekly: Sunday 3:00 AM UTC
-- Monthly: 1st of month 4:00 AM UTC
+## جدول النسخ الاحتياطي
+- يومي: الساعة 2:00 صباحاً UTC
+- أسبوعي: الأحد الساعة 3:00 صباحاً UTC
+- شهري: الأول من كل شهر الساعة 4:00 صباحاً UTC
 
-## Support
-For any issues, contact the system administrator.
+## الدعم
+لأي مشاكل، اتصل بمسؤول النظام.

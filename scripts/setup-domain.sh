@@ -1,55 +1,55 @@
 #!/bin/bash
-# DuckDNS Free Domain Setup
-# Provides: yourname.duckdns.org
+# إعداد نطاق DuckDNS المجاني
+# يوفر نطاقاً مثل: yourname.duckdns.org
 
-echo "=== DuckDNS Free Domain Setup ==="
+echo "=== إعداد نطاق DuckDNS المجاني ==="
 echo ""
 
-# Step 1: Create DuckDNS account
-echo "Step 1: Create DuckDNS Account"
-echo "1. Go to: https://www.duckdns.org"
-echo "2. Click 'Login' (top right)"
-echo "3. Sign in with GitHub/Google/Facebook"
+# الخطوة 1: إنشاء حساب DuckDNS
+echo "الخطوة 1: إنشاء حساب DuckDNS"
+echo "1. اذهب إلى: https://www.duckdns.org"
+echo "2. اضغط 'Login' (في الأعلى)"
+echo "3. سجل الدخول عبر GitHub/Google/Facebook"
 echo ""
 
-# Step 2: Create domain
-echo "Step 2: Create Domain"
-echo "1. After login, you'll see the DuckDNS panel"
-echo "2. In 'Domains' section, type your desired name"
-echo "   Example: irihan-warehouse"
-echo "3. Click 'add domain'"
-echo "4. Copy your token (shown next to domain)"
+# الخطوة 2: إنشاء النطاق
+echo "الخطوة 2: إنشاء النطاق"
+echo "1. بعد تسجيل الدخول، سترى لوحة DuckDNS"
+echo "2. في قسم 'Domains'، اكتب الاسم المطلوب"
+echo "   مثال: irihan-warehouse"
+echo "3. اضغط 'add domain'"
+echo "4. انسخ الرمز المميز (يظهر بجوار النطاق)"
 echo ""
 
-# Step 3: Get token
-read -p "Enter your DuckDNS token: " DUCKDNS_TOKEN
-read -p "Enter your domain name (without .duckdns.org): " DUCKDNS_DOMAIN
+# الخطوة 3: الحصول على الرمز المميز
+read -p "أدخل رمز DuckDNS المميز: " DUCKDNS_TOKEN
+read -p "أدخل اسم النطاق (بدون .duckdns.org): " DUCKDNS_DOMAIN
 
-# Step 4: Update IP
+# الخطوة 4: تحديث العنوان IP
 echo ""
-echo "Step 3: Updating IP address..."
+echo "الخطوة 3: تحديث عنوان IP..."
 curl -s "https://www.duckdns.org/update?domains=$DUCKDNS_DOMAIN&token=$DUCKDNS_TOKEN&ip="
 
-# Step 5: Create auto-update script
+# الخطوة 5: إنشاء سكريبت التحديث التلقائي
 cat > /tmp/duckdns_autoupdate.sh << EOF
 #!/bin/bash
-# Auto-update DuckDNS IP (runs every 5 minutes)
+# تحديث DuckDNS تلقائياً (كل 5 دقائق)
 curl -s "https://www.duckdns.org/update?domains=$DUCKDNS_DOMAIN&token=$DUCKDNS_TOKEN&ip="
 EOF
 
 chmod +x /tmp/duckdns_autoupdate.sh
 
 echo ""
-echo "=== DuckDNS Setup Complete ==="
-echo "Your domain: https://$DUCKDNS_DOMAIN.duckdns.org"
+echo "=== تم إعداد DuckDNS بنجاح ==="
+echo "نطاقك: https://$DUCKDNS_DOMAIN.duckdns.org"
 echo ""
-echo "Next steps:"
-echo "1. Go to Render Dashboard"
-echo "2. Click on your Odoo service"
-echo "3. Go to 'Settings' → 'Custom Domains'"
-echo "4. Add: $DUCKDNS_DOMAIN.duckdns.org"
-echo "5. Render will provide a CNAME value"
-echo "6. Go back to DuckDNS and add CNAME record"
+echo "الخطوات التالية:"
+echo "1. اذهب إلى لوحة تحكم Render"
+echo "2. اضغط على خدمة Odoo الخاصة بك"
+echo "3. اذهب إلى 'Settings' → 'Custom Domains'"
+echo "4. أضف: $DUCKDNS_DOMAIN.duckdns.org"
+echo "5. سيوفر لك Render قيمة CNAME"
+echo "6. عد إلى DuckDNS وأضف سجل CNAME"
 echo ""
-echo "Done! Your Odoo is now accessible at:"
+echo "تم! يمكنك الآن الوصول إلى Odoo على:"
 echo "https://$DUCKDNS_DOMAIN.duckdns.org"

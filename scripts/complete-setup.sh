@@ -1,23 +1,23 @@
 #!/bin/bash
-# Complete Setup Script for Odoo Warehouse
-# This script runs all setup steps in order
+# سكريبت الإعداد الكامل لنظام إدارة المخازن
+# يقوم هذا السكريبت بتشغيل جميع خطوات الإعداد بالترتيب
 
 set -e
 
 echo "=========================================="
-echo "   Odoo Warehouse Complete Setup"
+echo "   إعداد نظام إدارة المخازن الكامل"
 echo "=========================================="
 echo ""
-echo "Date: $(date)"
+echo "التاريخ: $(date)"
 echo ""
 
-# Colors for output
+# ألوان الإخراج
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
-NC='\033[0m' # No Color
+NC='\033[0m' # بدون لون
 
-# Function to print section
+# دالة لطباعة القسم
 print_section() {
     echo ""
     echo -e "${YELLOW}========================================${NC}"
@@ -26,177 +26,177 @@ print_section() {
     echo ""
 }
 
-# Function to print success
+# دالة لطباعة النجاح
 print_success() {
     echo -e "${GREEN}✅ $1${NC}"
 }
 
-# Function to print warning
+# دالة لطباعة التحذير
 print_warning() {
     echo -e "${YELLOW}⚠️  $1${NC}"
 }
 
-# Function to print error
+# دالة لطباعة الخطأ
 print_error() {
     echo -e "${RED}❌ $1${NC}"
 }
 
-# Step 1: Check prerequisites
-print_section "Step 1: Checking Prerequisites"
+# الخطوة 1: التحقق من المتطلبات
+print_section "الخطوة 1: التحقق من المتطلبات"
 
 if command -v docker &> /dev/null; then
-    print_success "Docker is installed"
+    print_success "Docker مثبت"
 else
-    print_warning "Docker is not installed"
+    print_warning "Docker غير مثبت"
 fi
 
 if command -v git &> /dev/null; then
-    print_success "Git is installed"
+    print_success "Git مثبت"
 else
-    print_warning "Git is not installed"
+    print_warning "Git غير مثبت"
 fi
 
 if command -v curl &> /dev/null; then
-    print_success "cURL is installed"
+    print_success "cURL مثبت"
 else
-    print_warning "cURL is not installed"
+    print_warning "cURL غير مثبت"
 fi
 
-# Step 2: Create directory structure
-print_section "Step 2: Creating Directory Structure"
+# الخطوة 2: إنشاء هيكل المجلدات
+print_section "الخطوة 2: إنشاء هيكل المجلدات"
 
 mkdir -p /tmp/odoo-warehouse/{scripts,backups,logs,reports}
-print_success "Directory structure created"
+print_success "تم إنشاء هيكل المجلدات"
 
-# Step 3: Setup DuckDNS Domain
-print_section "Step 3: Setting up DuckDNS Domain"
+# الخطوة 3: إعداد نطاق DuckDNS
+print_section "الخطوة 3: إعداد نطاق DuckDNS"
 
-echo "DuckDNS provides a free domain like: yourname.duckdns.org"
+echo "يوفر DuckDNS نطاقاً مجانياً مثل: yourname.duckdns.org"
 echo ""
-echo "To setup DuckDNS:"
-echo "1. Go to: https://www.duckdns.org"
-echo "2. Login with GitHub/Google/Facebook"
-echo "3. Create a new domain"
-echo "4. Copy the token"
+echo "لإعداد DuckDNS:"
+echo "1. اذهب إلى: https://www.duckdns.org"
+echo "2. سجل الدخول عبر GitHub/Google/Facebook"
+echo "3. أنشئ نطاقاً جديداً"
+echo "4. انسخ الرمز المميز"
 echo ""
 
-read -p "Do you want to setup DuckDNS now? (y/n): " setup_duckdns
+read -p "هل تريد إعداد DuckDNS الآن؟ (y/n): " setup_duckdns
 if [ "$setup_duckdns" = "y" ]; then
     bash scripts/setup-domain.sh
 else
-    print_warning "Skipping DuckDNS setup"
+    print_warning "تخطي إعداد DuckDNS"
 fi
 
-# Step 4: Setup Slack Alerts
-print_section "Step 4: Setting up Slack Alerts"
+# الخطوة 4: إعداد تنبيهات Slack
+print_section "الخطوة 4: إعداد تنبيهات Slack"
 
-echo "Slack provides free alert notifications"
+echo "يوفر Slack إشعارات تنبيه مجانية"
 echo ""
-echo "To setup Slack:"
-echo "1. Create workspace at: https://slack.com/create"
-echo "2. Create channel: #odoo-alerts"
-echo "3. Create Incoming Webhook"
+echo "لإعداد Slack:"
+echo "1. أنشئ مساحة عمل على: https://slack.com/create"
+echo "2. أنشئ قناة: #odoo-alerts"
+echo "3. أنشئ Incoming Webhook"
 echo ""
 
-read -p "Do you want to setup Slack now? (y/n): " setup_slack
+read -p "هل تريد إعداد Slack الآن؟ (y/n): " setup_slack
 if [ "$setup_slack" = "y" ]; then
     bash scripts/setup-slack.sh
 else
-    print_warning "Skipping Slack setup"
+    print_warning "تخطي إعداد Slack"
 fi
 
-# Step 5: Setup Google Drive Backup
-print_section "Step 5: Setting up Google Drive Backup"
+# الخطوة 5: إعداد النسخ الاحتياطي إلى Google Drive
+print_section "الخطوة 5: إعداد النسخ الاحتياطي إلى Google Drive"
 
-echo "Google Drive provides free cloud storage for backups"
+echo "يوفر Google Drive مساحة تخزين سحابية مجانية للنسخ الاحتياطي"
 echo ""
-echo "To setup Google Drive:"
-echo "1. Enable Google Drive API"
-echo "2. Create OAuth credentials"
-echo "3. Configure rclone"
+echo "لإعداد Google Drive:"
+echo "1. فعّل Google Drive API"
+echo "2. أنشئ بيانات اعتماد OAuth"
+echo "3. قم بتكوين rclone"
 echo ""
 
-read -p "Do you want to setup Google Drive now? (y/n): " setup_gdrive
+read -p "هل تريد إعداد Google Drive الآن؟ (y/n): " setup_gdrive
 if [ "$setup_gdrive" = "y" ]; then
     bash scripts/setup-gdrive.sh
 else
-    print_warning "Skipping Google Drive setup"
+    print_warning "تخطي إعداد Google Drive"
 fi
 
-# Step 6: Setup Monitoring
-print_section "Step 6: Setting up Monitoring"
+# الخطوة 6: إعداد المراقبة
+print_section "الخطوة 6: إعداد المراقبة"
 
-echo "Configuring system monitoring..."
+echo "تكوين مراقبة النظام..."
 python3 scripts/setup-monitoring.py
-print_success "Monitoring configured"
+print_success "تم تكوين المراقبة"
 
-# Step 7: Setup Backup System
-print_section "Step 7: Setting up Backup System"
+# الخطوة 7: إعداد نظام النسخ الاحتياطي
+print_section "الخطوة 7: إعداد نظام النسخ الاحتياطي"
 
-echo "Configuring backup system..."
+echo "تكوين نظام النسخ الاحتياطي..."
 python3 scripts/setup-backup.py
-print_success "Backup system configured"
+print_success "تم تكوين نظام النسخ الاحتياطي"
 
-# Step 8: Create crontab entries
-print_section "Step 8: Setting up Scheduled Tasks"
+# الخطوة 8: إنشاء إدخالات crontab
+print_section "الخطوة 8: إعداد المهام المجدولة"
 
-echo "Adding cron jobs for automated tasks..."
+echo "إضافة مهام cron للمهام الآلية..."
 
-# Create crontab file
+# إنشاء ملف crontab
 cat > /tmp/odoo-crontab << EOF
-# Odoo Warehouse Crontab
-# Daily backup at 2:00 AM
+# جدول أعمال Odoo
+# النسخ الاحتياطي اليومي الساعة 2:00 صباحاً
 0 2 * * * /tmp/gdrive_backup.sh >> /tmp/odoo-backup.log 2>&1
 
-# Health check every 5 minutes
+# الفحص الصحي كل 5 دقائق
 */5 * * * * /tmp/odoo_health_check.sh >> /tmp/odoo-health.log 2>&1
 
-# Performance report daily at 6:00 AM
+# تقرير الأداء يومياً الساعة 6:00 صباحاً
 0 6 * * * /tmp/odoo_performance_report.sh >> /tmp/odoo-performance.log 2>&1
 
-# DuckDNS update every 5 minutes (if configured)
+# تحديث DuckDNS كل 5 دقائق (إذا كان مكوناً)
 */5 * * * * /tmp/duckdns_autoupdate.sh >> /tmp/duckdns.log 2>&1
 EOF
 
-print_success "Crontab entries created"
+print_success "تم إنشاء إدخالات crontab"
 
-# Step 9: Summary
-print_section "Setup Summary"
+# الخطوة 9: الملخص
+print_section "ملخص الإعداد"
 
-echo "✅ Directory structure created"
-echo "✅ DuckDNS domain (if configured)"
-echo "✅ Slack alerts (if configured)"
-echo "✅ Google Drive backup (if configured)"
-echo "✅ Monitoring system configured"
-echo "✅ Backup system configured"
-echo "✅ Scheduled tasks created"
+echo "✅ تم إنشاء هيكل المجلدات"
+echo "✅ نطاق DuckDNS (إذا كان مكوناً)"
+echo "✅ تنبيهات Slack (إذا كانت مكونة)"
+echo "✅ النسخ الاحتياطي إلى Google Drive (إذا كان مكوناً)"
+echo "✅ تم تكوين نظام المراقبة"
+echo "✅ تم تكوين نظام النسخ الاحتياطي"
+echo "✅ تم إعداد المهام المجدولة"
 echo ""
 echo "=========================================="
-echo "   Next Steps"
+echo "   الخطوات التالية"
 echo "=========================================="
 echo ""
-echo "1. Push to GitHub:"
+echo "1. الدفع إلى GitHub:"
 echo "   git add ."
-echo "   git commit -m 'Complete setup'"
+echo "   git commit -m 'إعداد كامل'"
 echo "   git push"
 echo ""
-echo "2. Deploy to Render:"
-echo "   - Go to https://render.com"
-echo "   - Create Blueprint from GitHub repo"
-echo "   - Wait for deployment"
+echo "2. النشر على Render:"
+echo "   - اذهب إلى https://render.com"
+echo "   - أنشئ Blueprint من مستودع GitHub"
+echo "   - انتظر اكتمال النشر"
 echo ""
-echo "3. Configure extras:"
-echo "   - Run: bash scripts/setup-domain.sh"
-echo "   - Run: bash scripts/setup-slack.sh"
-echo "   - Run: bash scripts/setup-gdrive.sh"
+echo "3. تكوين الإضافات:"
+echo "   - شغّل: bash scripts/setup-domain.sh"
+echo "   - شغّل: bash scripts/setup-slack.sh"
+echo "   - شغّل: bash scripts/setup-gdrive.sh"
 echo ""
-echo "4. Access Odoo:"
-echo "   - URL: https://your-domain.duckdns.org"
-echo "   - Login: admin@example.com"
-echo "   - Password: admin"
+echo "4. الوصول إلى Odoo:"
+echo "   - الرابط: https://your-domain.duckdns.org"
+echo "   - تسجيل الدخول: admin@example.com"
+echo "   - كلمة المرور: admin"
 echo ""
-echo "5. Change admin password immediately!"
+echo "5. غيّر كلمة مرور admin فوراً!"
 echo ""
 echo "=========================================="
-echo "   Setup Complete!"
+echo "   تم الانتهاء من الإعداد!"
 echo "=========================================="

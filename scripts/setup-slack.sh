@@ -1,74 +1,74 @@
 #!/bin/bash
-# Slack Alerts Setup for Odoo
-# Sends notifications when issues are detected
+# إعداد تنبيهات Slack
+# يرسل إشعارات عند اكتشاف مشاكل
 
-echo "=== Slack Alerts Setup ==="
+echo "=== إعداد تنبيهات Slack ==="
 echo ""
 
-# Step 1: Create Slack Workspace
-echo "Step 1: Create Slack Workspace"
-echo "1. Go to: https://slack.com/create"
-echo "2. Create a free workspace"
-echo "3. Create a channel: #odoo-alerts"
+# الخطوة 1: إنشاء مساحة عمل Slack
+echo "الخطوة 1: إنشاء مساحة عمل Slack"
+echo "1. اذهب إلى: https://slack.com/create"
+echo "2. أنشئ مساحة عمل مجانية"
+echo "3. أنشئ قناة: #odoo-alerts"
 echo ""
 
-# Step 2: Create Incoming Webhook
-echo "Step 2: Create Incoming Webhook"
-echo "1. Go to: https://api.slack.com/apps"
-echo "2. Click 'Create New App'"
-echo "3. Choose 'From scratch'"
-echo "4. App Name: Odoo Alerts"
-echo "5. Workspace: Select your workspace"
-echo "6. Go to 'Incoming Webhooks'"
-echo "7. Toggle 'Activate Incoming Webhooks' ON"
-echo "8. Click 'Add New Webhook to Workspace'"
-echo "9. Select channel: #odoo-alerts"
-echo "10. Copy the Webhook URL"
+# الخطوة 2: إنشاء Incoming Webhook
+echo "الخطوة 2: إنشاء Incoming Webhook"
+echo "1. اذهب إلى: https://api.slack.com/apps"
+echo "2. اضغط 'Create New App'"
+echo "3. اختر 'From scratch'"
+echo "4. اسم التطبيق: تنبيهات Odoo"
+echo "5. مساحة العمل: اختر مساحة عملك"
+echo "6. اذهب إلى 'Incoming Webhooks'"
+echo "7. قم بتفعيل 'Activate Incoming Webhooks'"
+echo "8. اضغط 'Add New Webhook to Workspace'"
+echo "9. اختر القناة: #odoo-alerts"
+echo "10. انسخ عنوان URL الخاص بـ Webhook"
 echo ""
 
-# Step 3: Get Webhook URL
-read -p "Enter your Slack Webhook URL: " SLACK_WEBHOOK
+# الخطوة 3: الحصول على Webhook URL
+read -p "أدخل عنوان URL الخاص بـ Slack Webhook: " SLACK_WEBHOOK
 
-# Step 4: Create alert script
+# الخطوة 4: إنشاء سكريبت التنبيه
 cat > /tmp/slack_alert.sh << EOF
 #!/bin/bash
-# Send alert to Slack
-# Usage: ./slack_alert.sh "Alert message"
+# إرسال تنبيه إلى Slack
+# الاستخدام: ./slack_alert.sh "رسالة التنبيه"
 
 MESSAGE=\$1
 TIMESTAMP=\$(date '+%Y-%m-%d %H:%M:%S')
 
 curl -X POST -H 'Content-type: application/json' \\
     --data "{
-        \\"text\\": \"🤖 *Odoo Alert*\\n\\n*Time:* \$TIMESTAMP\\n*Message:* \$MESSAGE\\n\\n*System:* Odoo Warehouse Management\"
+        \\"text\\": \"🤖 *تنبيه Odoo*\\n\\n*الوقت:* \$TIMESTAMP\\n*الرسالة:* \$MESSAGE\\n\\n*النظام:* إدارة المخازن\"
     }" \\
     $SLACK_WEBHOOK
 EOF
 
 chmod +x /tmp/slack_alert.sh
 
-# Step 5: Create test alert
+# الخطوة 5: إنشاء اختبار التنبيه
 cat > /tmp/test_slack.sh << EOF
 #!/bin/bash
-# Test Slack connection
-echo "Testing Slack connection..."
-/tmp/slack_alert.sh "✅ Odoo alerts configured successfully! This is a test message."
-echo "Check your Slack channel for the test message."
+# اختبار اتصال Slack
+echo "اختبار اتصال Slack..."
+/tmp/slack_alert.sh "✅ تم تكوين تنبيهات Odoo بنجاح! هذه رسالة اختبار."
+echo "تحقق من قناة Slack للرسالة الاختبارية."
 EOF
 
 chmod +x /tmp/test_slack.sh
 
 echo ""
-echo "=== Slack Setup Complete ==="
+echo "=== تم إعداد تنبيهات Slack ==="
 echo ""
-echo "Test the connection:"
+echo "اختبر الاتصال:"
 echo "/tmp/test_slack.sh"
 echo ""
-echo "Alert types configured:"
-echo "1. System health alerts"
-echo "2. Low stock warnings"
-echo "3. Backup status"
-echo "4. Error notifications"
+echo "أنواع التنبيهات المكونة:"
+echo "1. تنبيهات حالة النظام"
+echo "2. تحذيرات المخزون المنخفض"
+echo "3. حالة النسخ الاحتياطي"
+echo "4. إشعارات الخطأ"
 echo ""
-echo "To send manual alert:"
-echo "./slack_alert.sh 'Your alert message here'"
+echo "لإرسال تنبيه يدوي:"
+echo "./slack_alert.sh 'رسالة التنبيه هنا'"
